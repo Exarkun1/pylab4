@@ -1,11 +1,22 @@
+"""
+Модуль обработки временных рядов.
+"""
 import numpy as np
 from pandas import DataFrame, Series, Index
 from datetime import timedelta
 
 class TimeSeriesAnalyser:
+    """
+    Класс обработки временных рядов.
+    """
     def __init__(self,
                  series: Series,
                  interval: timedelta=None):
+        """
+        Args:
+            series: временной ряд.
+            interval: минимальный интервал ряда.
+        """
         self.__series = series
         self.__interval = None
 
@@ -21,26 +32,60 @@ class TimeSeriesAnalyser:
 
     @property
     def size(self) -> int:
+        """
+        Свойство длины временного ряда.
+
+        Returns:
+            Длина временного ряда.
+        """
         return self.__series.size
     
     
     @property
     def index(self) -> Index:
+        """
+        Свойство индекса временного ряда.
+
+        Returns:
+            Индекс временного ряда.
+        """
         return self.__series.index
     
     
     @property
     def interval(self) -> timedelta:
+        """
+        Свойство минимального интервала временного ряда.
+
+        Returns:
+            Интервал временного ряда.
+        """
         return self.__interval
     
     
     @property
     def series(self) -> Series:
+        """
+        Свойство временного ряда.
+
+        Returns:
+            Временной ряд.
+        """
         return self.__series
     
     
     def find_extremes(self,
                       glb: bool=False) -> DataFrame:
+        """
+        Метод поиска экстремумов временного ряда.
+
+        Args:
+            glb: тип экстремумов (глобальные, если True,
+            локальные, если False).
+
+        Returns:
+            Таблица с экстремумами временного ряда.
+        """
         if glb:
             return self._find_glb_extremes()
         else:
@@ -48,12 +93,24 @@ class TimeSeriesAnalyser:
 
 
     def _find_glb_extremes(self) -> DataFrame:
+        """
+        Метод поиска глобальных экстремумов временного ряда.
+
+        Returns:
+            Таблица с глобальными экстремумами временного ряда.
+        """
         ids = [np.argmin(self.series), np.argmax(self.series)]
         return DataFrame({"Extreme": self.series.iloc[ids], "Type": ["Min", "Max"]},
                          index=self.index[ids])
     
 
     def _find_loc_extremes(self) -> DataFrame:
+        """
+        Метод поиска локальных экстремумов временного ряда.
+
+        Returns:
+            Таблица с локальными экстремумами временного ряда.
+        """
         ids = []
         types = []
         
@@ -70,6 +127,12 @@ class TimeSeriesAnalyser:
     
     
     def differentiate(self) -> Series:
+        """
+        Метод вычисления дифференциала временного ряда.
+
+        Returns:
+            Дифференциал временного ряда.
+        """
         intervals = (self.index[1:] - self.index[:-1]) / self.interval
         diffs = (self.series.values[1:] - self.series.values[:-1])
 
@@ -78,6 +141,15 @@ class TimeSeriesAnalyser:
 
     def calc_movavg(self,
                     window: int|timedelta) -> Series:
+        """
+        Метод вычисления скользящего среднего временного ряда.
+
+        Args:
+            window: окно, по которому вычисляется скользящее среднее.
+
+        Returns:
+            Скользящее среднее временного ряда.
+        """
         movavgs = None
         if isinstance(window, int):
             movavgs = self._calc_movavg_int(window)
@@ -88,6 +160,16 @@ class TimeSeriesAnalyser:
     
     def _calc_movavg_int(self,
                          window: int) -> Series:
+        """
+        Метод вычисления скользящего среднего временного ряда 
+        по целочисленному окну.
+
+        Args:
+            window: окно, по которому вычисляется скользящее среднее.
+
+        Returns:
+            Скользящее среднее временного ряда.
+        """
         if window < 1:
             error = ValueError("Попытка передачи отрицательного окна.")
             raise error
@@ -104,6 +186,16 @@ class TimeSeriesAnalyser:
     
     def _calc_movavg_timedelta(self,
                                window: timedelta):
+        """
+        Метод вычисления скользящего среднего временного ряда 
+        по интервальному окну.
+
+        Args:
+            window: окно, по которому вычисляется скользящее среднее.
+
+        Returns:
+            Скользящее среднее временного ряда.
+        """
         movavgs = np.empty([self.size], dtype=float)
         for i in range(0, self.size):
             sum_prices = 0
@@ -121,6 +213,12 @@ class TimeSeriesAnalyser:
     
     
     def calc_autocor(self) -> Series:
+        """
+        Метод для вычисления автокорреляции временного ряда.
+
+        Returns:
+            Автокорреляция временного ряда.
+        """
         autocors = np.empty([self.size-1])
         for i in range(0, self.size-1):
             x = self.series.values[i:]

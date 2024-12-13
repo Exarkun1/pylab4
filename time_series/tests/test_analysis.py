@@ -1,3 +1,6 @@
+"""
+Модуль тестирования работы класса обработки временных рядов.
+"""
 import unittest
 import numpy as np
 from pandas import Series
