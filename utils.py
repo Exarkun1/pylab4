@@ -24,7 +24,7 @@ def str_to_timedelta(period: str) -> timedelta:
                 raise RuntimeError("Неверный формат периода.")
         return timedelta(seconds=seconds)
 
-def comand_to_list(comand: str) -> list[str]:
+def command_to_list(comand: str) -> list[str]:
     return comand.split(" ")
 
 def calculate_dataframe(series: Series,
