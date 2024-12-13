@@ -29,7 +29,6 @@ class TimeSeriesAnalyser:
         else:
             self.__interval = interval
 
-
     @property
     def size(self) -> int:
         """
@@ -39,7 +38,6 @@ class TimeSeriesAnalyser:
             Длина временного ряда.
         """
         return self.__series.size
-    
     
     @property
     def index(self) -> Index:
@@ -51,7 +49,6 @@ class TimeSeriesAnalyser:
         """
         return self.__series.index
     
-    
     @property
     def interval(self) -> timedelta:
         """
@@ -62,7 +59,6 @@ class TimeSeriesAnalyser:
         """
         return self.__interval
     
-    
     @property
     def series(self) -> Series:
         """
@@ -72,7 +68,6 @@ class TimeSeriesAnalyser:
             Временной ряд.
         """
         return self.__series
-    
     
     def find_extremes(self,
                       glb: bool=False) -> DataFrame:
@@ -91,7 +86,6 @@ class TimeSeriesAnalyser:
         else:
             return self._find_loc_extremes()
 
-
     def _find_glb_extremes(self) -> DataFrame:
         """
         Метод поиска глобальных экстремумов временного ряда.
@@ -102,7 +96,6 @@ class TimeSeriesAnalyser:
         ids = [np.argmin(self.series), np.argmax(self.series)]
         return DataFrame({"Extreme": self.series.iloc[ids], "Type": ["Min", "Max"]},
                          index=self.index[ids])
-    
 
     def _find_loc_extremes(self) -> DataFrame:
         """
@@ -124,8 +117,7 @@ class TimeSeriesAnalyser:
 
         return DataFrame({"Extreme": self.series.iloc[ids], "Type": types}, 
                          index=self.index[ids])
-    
-    
+
     def differentiate(self) -> Series:
         """
         Метод вычисления дифференциала временного ряда.
@@ -137,7 +129,6 @@ class TimeSeriesAnalyser:
         diffs = (self.series.values[1:] - self.series.values[:-1])
 
         return Series(diffs / intervals, index=self.index[:-1], name="Diff")
-    
 
     def calc_movavg(self,
                     window: int|timedelta) -> Series:
@@ -156,8 +147,7 @@ class TimeSeriesAnalyser:
         if isinstance(window, timedelta):
             movavgs = self._calc_movavg_timedelta(window)
         return movavgs
-    
-    
+
     def _calc_movavg_int(self,
                          window: int) -> Series:
         """
@@ -182,8 +172,7 @@ class TimeSeriesAnalyser:
             movavgs[i] = np.average(self.series.values[start_pos:i+1])
 
         return Series(movavgs, index=self.index, name="Movavg")
-    
-    
+
     def _calc_movavg_timedelta(self,
                                window: timedelta):
         """
@@ -210,8 +199,7 @@ class TimeSeriesAnalyser:
             movavgs[i] = sum_prices / n
 
         return Series(movavgs, index=self.index, name="Movavg")
-    
-    
+
     def calc_autocor(self) -> Series:
         """
         Метод для вычисления автокорреляции временного ряда.
@@ -231,7 +219,7 @@ class TimeSeriesAnalyser:
             autocors[i] = (avg_xy - avg_x*avg_y) / (std_x*std_y)
 
         return Series(autocors, index=self.index[:-1], name="Autocor")
-    
+
 
 if __name__ == "__main__":
     pass
