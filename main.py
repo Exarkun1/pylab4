@@ -7,21 +7,69 @@ from data_storage import DataStorage
 from plots import Drawer
 
 def is_exit(command: list[str]) -> bool:
+    '''
+        Метод проверяющий что введена команда exit
+
+        Args:
+            command: Список аргументов
+        Returns:
+            Правильность формата bool
+        '''
     return len(command) >= 1 and command[0] == "exit"
 
 def is_load(command: list[str]) -> bool:
+    '''
+        Метод проверяющий что введена команда load
+
+        Args:
+            command: Список аргументов
+        Returns:
+            Правильность формата bool
+        '''
     return len(command) == 2 and command[0] == "load"
 
 def is_save(command: list[str]) -> bool:
+    '''
+    Метод проверяющий что введена команда save
+
+    Args:
+        command: Список аргументов
+    Returns:
+        Правильность формата bool
+    '''
     return len(command) == 2 and command[0] == "save"
 
 def is_download(command: list[str]) -> bool:
+    '''
+        Метод проверяющий что введена команда download
+
+        Args:
+            command: Список аргументов
+        Returns:
+            Правильность формата bool
+        '''
     return len(command) == 5 and command[0] == "download"
 
 def is_draw(command: list[str]) -> bool:
+    '''
+        Метод проверяющий что введена команда draw
+
+        Args:
+            command: Список аргументов
+        Returns:
+            Правильность формата bool
+        '''
     return len(command) > 1 and command[0] == "draw"
 
 def is_help(command: list[str]) -> bool:
+    '''
+        Метод проверяющий что введена команда help
+
+        Args:
+            command: Список аргументов
+        Returns:
+            Правильность формата bool
+        '''
     return len(command) == 1 and command[0] == "help"
 
 if __name__ == "__main__":

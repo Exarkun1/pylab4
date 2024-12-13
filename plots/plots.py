@@ -73,4 +73,4 @@ class Drawer:
         ax = self._fig.add_subplot(self._nrows, self._ncols, coord)
         ax.plot(self._data.index, self._data[column])
         ax.set_title(column)
-        self._axs.append(ax) 
+        self._axs.append(ax)
